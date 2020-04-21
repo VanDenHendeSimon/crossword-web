@@ -1,0 +1,9 @@
+venv/
+design/
+.vscode/
+.idea/
+database/
+backend/repositories/__pycache__/
+backend/models/__pycache__/
+backend/geckodriver.log
+backend/config.py
