@@ -5,6 +5,7 @@ const size = 13;
 let htmlBoard;
 let highlightedCell;
 let wordsFound = 0;
+let columns = 4;
 
 const crossOutWord = function (word) {
     for (const w of document.querySelectorAll(".wordListItem")) {
@@ -15,12 +16,12 @@ const crossOutWord = function (word) {
     }
 };
 
-const updateProgressBar = function(amountOfWords) {
-        // update progressbar
-        const percentage = `${Math.round(wordsFound / amountOfWords * 100)}%`;
-        document.querySelector('.bar').style.width = percentage;
-        document.querySelector('.bar').innerHTML = percentage;
-}
+const updateProgressBar = function (amountOfWords) {
+    // update progressbar
+    const percentage = `${Math.round((wordsFound / amountOfWords) * 100)}%`;
+    document.querySelector(".bar").style.width = percentage;
+    document.querySelector(".bar").innerHTML = percentage;
+};
 
 const addEventsToBoard = function (words) {
     for (const cell of document.querySelectorAll("td")) {
@@ -99,13 +100,14 @@ const createTable = function (puzzle) {
 };
 
 const createWordList = function (words) {
-    let htmlString = "<ul>";
+    let htmlString = '<ul class="wordList">';
     for (const key of Object.keys(words)) {
         htmlString += `<li class="wordListItem">${words[key].word}</li>`;
     }
     htmlString += "</ul>";
 
     document.querySelector(".js-words").innerHTML = htmlString;
+    setColumnsWordList();
 };
 
 const showWordSearch = function (jsonObject) {
@@ -127,21 +129,40 @@ const callbackError = function (e) {
     console.log(e);
 };
 
-const setDimensions = function() {
-    const htmlRow = document.querySelector(".o-row");
-    let dimension = Math.min(htmlRow.scrollWidth, htmlRow.scrollHeight);
+const setDimensions = function () {
+    const windowWidth = window.innerWidth;
+    const windowHeight = window.innerHeight;
+    let dimension = Math.min(windowWidth, windowHeight);
 
-    if (dimension === htmlRow.scrollWidth) {
+    if (dimension === windowWidth) {
         // width < height (= portrait mode)
-        dimension *= 0.8;
+        dimension = windowWidth * 0.75;
+        columns = 3;
     } else {
         // height < width (= landscape)
-        dimension *= 0.6;
+        dimension = windowHeight * 0.7;
+        columns = 4;
     }
 
+    const htmlRow = document.querySelector(".o-row");
     htmlRow.style.setProperty("width", `${dimension}px`);
     htmlRow.style.setProperty("height", `${dimension}px`);
-}
+    setColumnsWordList();
+};
+
+const setColumnsWordList = function () {
+    // Set amount of columns for the list of words
+    const wordListItem = document.querySelector(".wordList");
+    if (wordListItem) {
+        wordListItem.style.setProperty("columns", columns);
+        wordListItem.style.setProperty("-webkit-columns", columns);
+        wordListItem.style.setProperty("-moz-columns", columns);
+    }
+};
+
+const resize = function () {
+    console.log("resized");
+};
 
 /* init */
 const init = function () {
@@ -150,3 +171,4 @@ const init = function () {
 };
 
 document.addEventListener("DOMContentLoaded", init);
+window.addEventListener("resize", setDimensions);

@@ -3,6 +3,7 @@
     margin: 0;
     padding: 0;
     font-family: sans-serif;
+    font-size: 9px;
     transition: all 0.1s ease-in-out;
 }
 
@@ -53,6 +54,7 @@ td {
 
 .found {
     background-color: hotpink;
+    font-weight: 700;
 }
 
 .highlight {
@@ -89,5 +91,30 @@ td {
     background-color: hotpink;
     text-align: center; /* To center it horizontally (if you want) */
     line-height: 30px; /* To center it vertically */
-    color: white;
+    color: black;
+}
+
+/* Small devices (landscape phones, 576px and up) */
+@media (min-width: 576px) {
+    * {
+        font-size: 12px;
+    }
+}
+
+/* Medium devices (tablets, 768px and up) */
+@media (min-width: 768px) {
+    * {
+        font-size: 14px;
+    }
+}
+
+/* Large devices (landscape tablets, desktops, 992px and up) */
+@media (min-width: 992px) {
+}
+
+/* Extra large devices (large desktops, 1200px and up) */
+@media (min-width: 1200px) {
+    * {
+        font-size: 16px;
+    }
 }

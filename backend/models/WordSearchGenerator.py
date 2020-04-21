@@ -1,4 +1,5 @@
 import random
+from backend.repositories.DataRepository import DataRepository
 
 
 class WordSearchGenerator:
@@ -21,24 +22,25 @@ class WordSearchGenerator:
             raise ValueError("Size %s is not valid, must be of type int" % value)
 
     def generate_puzzle(self):
-        words = [
-            'test',
-            'simon',
-            'youtube',
-            'facebook',
-            'luna',
-            'dance',
-            'monkey',
-            'grid',
-            'widget',
-            'python',
-            'live',
-            'netflix',
-            'classroom',
-            'publish',
-            'views',
-            'share',
+        all_words = [
+            word['word'] for word in DataRepository.get_all_words()
+            if self.size > len(word['word']) > 2
         ]
+        random.shuffle(all_words)
+        # base words
+        words = all_words[:int(self.size * 1.3)]
+        # append some smaller words
+        for w in all_words[int(self.size * 1.3):]:
+            if len(w) < int(self.size * 0.35):
+                if len(words) < int(self.size * 2.1):
+                    if w not in words:
+                        words.append(w)
+                        continue
+            elif len(w) < int(self.size * 0.5):
+                if len(words) < int(self.size * 1.7):
+                    if w not in words:
+                        words.append(w)
+                        continue
 
         # # invert 40% of the words (maybe too difficult)
         # for index, word in enumerate(self.words):
@@ -111,7 +113,7 @@ class WordSearchGenerator:
         coord_dict = {}
 
         first_index_row = random.randrange(0, self.size)
-        first_index_col = random.randrange(0, self.size - len(word))
+        first_index_col = random.randrange(0, (self.size - len(word)))
 
         # coord_dict[(first_index_row, first_index_col)] = word[0]
         coord_dict["%d-%d" % (first_index_row, first_index_col)] = word[0]
@@ -126,7 +128,7 @@ class WordSearchGenerator:
     def vertical_word(self, word):
         coord_dict = {}
 
-        first_index_row = random.randrange(0, self.size - len(word))
+        first_index_row = random.randrange(0, (self.size - len(word)))
         first_index_col = random.randrange(0, self.size)
 
         coord_dict["%d-%d" % (first_index_row, first_index_col)] = word[0]
@@ -140,8 +142,9 @@ class WordSearchGenerator:
     def diagonal_word(self, word):
         coord_dict = {}
 
-        first_index_row = random.randrange(0, self.size - len(word))
-        first_index_col = random.randrange(0, self.size - len(word))
+        # print("randrange 0, %s" % (self.size - len(word)))
+        first_index_row = random.randrange(0, (self.size - len(word)))
+        first_index_col = random.randrange(0, (self.size - len(word)))
 
         coord_dict["%d-%d" % (first_index_row, first_index_col)] = word[0]
         for index, char in enumerate(word):
