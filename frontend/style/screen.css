@@ -72,6 +72,7 @@ td {
 
 .crossed {
     text-decoration: line-through;
+    text-decoration-thickness: 0.1rem; /* Only in Firefox */
 }
 
 .js-statusBar {
