@@ -2,7 +2,7 @@ import json
 from flask import Flask, jsonify    # request
 from flask_cors import CORS
 from repositories.DataRepository import DataRepository
-from models.NetflixBot import NetflixBot
+from models.WordSearchGenerator import WordSearchGenerator
 
 
 # Start app
@@ -16,13 +16,15 @@ endpoint = '/api/v1/'
 # ROUTES
 @app.route('/', methods=["GET"])
 def index():
-    return '<a href="http://127.0.0.1:5000/%s">api</a>' % endpoint
+    return jsonify(msg="so far so good"), 200
 
 
-@app.route(endpoint+'login', methods=["GET"])
-def login():
-    netflix_bot = NetflixBot("charlottevdhende@gmail.com", "poelstraat14", "Simon")
-    return jsonify("so far so good"), 200
+@app.route('/puzzle/<size>', methods=["GET"])
+def get_puzzle(size):
+    word_search = WordSearchGenerator(int(size))
+    puzzle, words = word_search.generate_puzzle()
+
+    return jsonify(puzzle=puzzle, words=words), 200
 
 
 # Start app

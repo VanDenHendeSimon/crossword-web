@@ -45,6 +45,7 @@ class WordSearchGenerator:
         #     if random.uniform(0, 1) < 0.4:
         #         words[index] = word[::-1]
         index_dict = dict()
+        words_dict = dict()
         for word in words:
             # 0 = Horizontal, 1 = Vertical, 2 = Diagonal LtoR, 3 = Diagonal RtoL
             # alignment = random.randrange(0, 3)
@@ -93,14 +94,18 @@ class WordSearchGenerator:
                             if index_dict[coord] != coord_dict[coord]:
                                 same_coord = False
                                 break
-                    # same_coord = not any(elem in coord_dict.keys() for elem in used_indices)
 
                 else:
                     same_coord = True
 
             index_dict.update(coord_dict)
+            words_dict[list(coord_dict.keys())[0]] = {
+                'last_letter': list(coord_dict.keys())[-1],
+                'word': word,
+                'all_letters': list(coord_dict.keys()),
+            }
 
-        return index_dict
+        return index_dict, words_dict
 
     def horizontal_word(self, word):
         coord_dict = {}

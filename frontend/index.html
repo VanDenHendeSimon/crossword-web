@@ -4,54 +4,15 @@
         <meta charset="UTF-8" />
         <meta name="viewport" content="width=device-width, initial-scale=1.0" />
         <!-- <title>Instand</title> -->
-        <title>Luxerie</title>
-        <!-- leaflet css -->
-        <link
-            rel="stylesheet"
-            href="https://unpkg.com/leaflet@1.6.0/dist/leaflet.css"
-            integrity="sha512-xwE/Az9zrjBIphAcBb3F6JVqxf46+CDLwfLMHloNu6KEQCAWi6HcDUbeOfBIptF7tcCzusKFjFw2yuvEpDL9wQ=="
-            crossorigin=""
-        />
+        <title>Word Search</title>
         <!-- Custom CSS -->
         <link rel="stylesheet" href="style/screen.css">
-        
-        <!-- JavaScript Plugins -->
-        <script src="script/clipper.js"></script>
-        <script src="https://cdnjs.cloudflare.com/ajax/libs/leaflet/1.0.3/leaflet.js"></script>
-        <script src="https://cdn.maptiler.com/mapbox-gl-js/v1.5.1/mapbox-gl.js"></script>
-        <script src="https://cdn.maptiler.com/mapbox-gl-leaflet/latest/leaflet-mapbox-gl.js"></script>
 
         <!-- Custom JavaScript -->
         <script src="script/dataHandler.js"></script>
         <script src="script/app.js"></script>
     </head>
     <body>
-        <div class="static-row">
-            <div class="hamburger-menu">
-                <div class="line line-1"></div>
-                <div class="line line-2"></div>
-                <div class="line line-3"></div>
-            </div>
-
-            <!-- <p class="logo">Instand</p> -->
-            <p class="logo">Luxerie</p>
-
-        </div>
-        <div class="property-panel">
-            <div class="offset">
-                <!--
-                <div class="c-input">
-                    <input type="text" name="address" id="address" class="input-field">
-                </div>
-                -->
-                <div class="scrollable-categories">
-                    <ul class="js-categories"></ul>
-                </div>
-                <div class="footer">
-                    <p>	&copy; Simon Van Den Hende</p>
-                </div>
-            </div>
-            </div>
-        <div id="mapid"></div>
+        <div class="js-board" unselectable="on"></div>
     </body>
 </html>

@@ -95,6 +95,10 @@ class CrossWordPuzzle(QtWidgets.QMainWindow):
         self.window_widget.setLayout(self.main_layout)
 
     def fill_word_list(self):
+        """
+        displays the words under the grid
+        :return:
+        """
         for i in reversed(range(self.words_layout.count())):
             self.words_layout.itemAt(i).widget().setParent(None)
 
