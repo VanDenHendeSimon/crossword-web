@@ -3,18 +3,30 @@
     margin: 0;
     padding: 0;
     font-family: sans-serif;
+    transition: all 0.1s ease-in-out;
 }
 
-.js-board {
-    width: 70%;
-    height: 70vh;
+ul {
+    text-transform: capitalize;
+    list-style-type: none;
+    columns: 4;
+    -webkit-columns: 4;
+    -moz-columns: 4;
+}
+
+.o-row {
+    width: 100%;
+    height: 100vh;
     margin: auto;
-    padding-top: 20px;
-    -moz-user-select: none;
-    -webkit-user-select: none;
-    -ms-user-select:none;
-    user-select:none;
-    -o-user-select:none;
+    position: relative;
+    top: 20px;
+    left: 0;
+}
+
+/* allow table to take full width and height of the container */
+.js-board {
+    width: 100%;
+    height: 100%;
 }
 
 table {
@@ -23,6 +35,11 @@ table {
     height: 100%;
     text-align: center;
     border-collapse: collapse;
+    -moz-user-select: none;
+    -webkit-user-select: none;
+    -ms-user-select: none;
+    user-select: none;
+    -o-user-select: none;
 }
 
 table:hover {
@@ -34,10 +51,42 @@ td {
     border-width: 1px 1px;
 }
 
-.highlight {
-    background-color: aquamarine;
-}
-
 .found {
     background-color: hotpink;
+}
+
+.highlight {
+    background-color: aquamarine;
+    text-decoration: underline;
+}
+
+.loading {
+    width: 100%;
+    margin-top: 20px;
+    text-align: center;
+}
+
+.js-words {
+    margin-top: 20px;
+}
+
+.crossed {
+    text-decoration: line-through;
+}
+
+.js-statusBar {
+    margin-top: 20px;
+    border-radius: 5px;
+    width: 100%;
+    background-color: lightgrey;
+}
+
+.bar {
+    width: 1%;
+    border-radius: 5px;
+    height: 30px;
+    background-color: hotpink;
+    text-align: center; /* To center it horizontally (if you want) */
+    line-height: 30px; /* To center it vertically */
+    color: white;
 }
