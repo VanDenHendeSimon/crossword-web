@@ -3,8 +3,9 @@
 // Global variables
 const size = 13;
 let htmlBoard;
+let canvas;
 let highlightedCell;
-let wordsFound = 0;
+let wordsFound = [];
 let columns = 4;
 
 const crossOutWord = function (word) {
@@ -18,9 +19,37 @@ const crossOutWord = function (word) {
 
 const updateProgressBar = function (amountOfWords) {
     // update progressbar
-    const percentage = `${Math.round((wordsFound / amountOfWords) * 100)}%`;
+    const percentage = `${Math.round(
+        (wordsFound.length / amountOfWords) * 100
+    )}%`;
     document.querySelector(".bar").style.width = percentage;
     document.querySelector(".bar").innerHTML = percentage;
+};
+
+const pxToFloat = function (string) {
+    return parseFloat(string.slice(0, -2));
+};
+
+const drawLine = function (startCellCoords, endCellCoords) {
+    const startX = parseFloat(startCellCoords.split("-")[1]);
+    const startY = parseFloat(startCellCoords.split("-")[0]);
+    const endX = parseFloat(endCellCoords.split("-")[1]);
+    const endY = parseFloat(endCellCoords.split("-")[0]);
+
+    const canvas = document.getElementById("canvas");
+    const cellSize = pxToFloat(canvas.style.width) / size;
+    const ctx = canvas.getContext("2d");
+
+    ctx.beginPath();
+    ctx.moveTo(
+        cellSize * startX + cellSize * 0.5,
+        cellSize * startY + cellSize * 0.5
+    );
+    ctx.lineTo(
+        cellSize * endX + cellSize * 0.5,
+        cellSize * endY + cellSize * 0.5
+    );
+    ctx.stroke();
 };
 
 const addEventsToBoard = function (words) {
@@ -43,10 +72,12 @@ const addEventsToBoard = function (words) {
                 // Check whether the selected word is in the list of words
                 if (words.hasOwnProperty(firstLetterCoords)) {
                     if (
-                        words[firstLetterCoords].last_letter == lastLetterCoords
+                        words[firstLetterCoords].last_letter == lastLetterCoords &&
+                        !wordsFound.includes(words[firstLetterCoords].word)
                     ) {
                         // A word has been found
-                        wordsFound += 1;
+                        wordsFound.push(words[firstLetterCoords].word);
+                        console.log(wordsFound);
 
                         // Colorize the letters of the word that was found
                         for (const cell of words[firstLetterCoords]
@@ -65,6 +96,9 @@ const addEventsToBoard = function (words) {
                             // Update progressbar
                             updateProgressBar(Object.keys(words).length);
                         }
+
+                        // Draw line
+                        drawLine(firstLetterCoords, lastLetterCoords);
                     }
                 }
                 // Turn the highlighted cell off again
@@ -147,6 +181,15 @@ const setDimensions = function () {
     const htmlRow = document.querySelector(".o-row");
     htmlRow.style.setProperty("width", `${dimension}px`);
     htmlRow.style.setProperty("height", `${dimension}px`);
+    htmlRow.style.setProperty("left", `${(windowWidth - dimension) * 0.5}px`);
+
+    // Overlay and align canvas
+    canvas.width = dimension;
+    canvas.height = dimension;
+    canvas.style.setProperty("width", `${dimension}px`);
+    canvas.style.setProperty("height", `${dimension}px`);
+    canvas.style.setProperty("left", `${(windowWidth - dimension) * 0.5}px`);
+
     setColumnsWordList();
 };
 
@@ -160,12 +203,9 @@ const setColumnsWordList = function () {
     }
 };
 
-const resize = function () {
-    console.log("resized");
-};
-
 /* init */
 const init = function () {
+    canvas = document.querySelector("#canvas");
     setDimensions();
     getWordSearch();
 };

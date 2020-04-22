@@ -46,8 +46,10 @@ class WordSearchGenerator:
         # for index, word in enumerate(self.words):
         #     if random.uniform(0, 1) < 0.4:
         #         words[index] = word[::-1]
+
         index_dict = dict()
         words_dict = dict()
+        placed_words = []
         for word in words:
             # 0 = Horizontal, 1 = Vertical, 2 = Diagonal LtoR, 3 = Diagonal RtoL
             # alignment = random.randrange(0, 3)
@@ -61,8 +63,27 @@ class WordSearchGenerator:
 
             # Init duplicates variable
             same_coord = False
+            attemps = 0
 
             while not same_coord:
+                attemps += 1
+                print(attemps)
+
+                if attemps > 10:
+                    try:
+                        # If the word has already failed 10 times, try a shorter word
+                        word = next(
+                            w for w in all_words
+                            if w not in placed_words and
+                            w not in words and
+                            len(w) < len(word)
+                        )
+                        print("Changed word to %s" % word)
+                        attemps = 0
+                    except StopIteration:
+                        # no valid word could be found (probably bcus the length dropped to < 3
+                        same_coord = True
+
                 alignment = random.randrange(0, 3)
 
                 if alignment == 0:
@@ -100,6 +121,7 @@ class WordSearchGenerator:
                 else:
                     same_coord = True
 
+            placed_words.append(word)
             index_dict.update(coord_dict)
             words_dict[list(coord_dict.keys())[0]] = {
                 'last_letter': list(coord_dict.keys())[-1],
