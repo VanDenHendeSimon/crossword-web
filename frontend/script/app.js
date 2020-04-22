@@ -77,7 +77,6 @@ const addEventsToBoard = function (words) {
                     ) {
                         // A word has been found
                         wordsFound.push(words[firstLetterCoords].word);
-                        console.log(wordsFound);
 
                         // Colorize the letters of the word that was found
                         for (const cell of words[firstLetterCoords]
@@ -91,6 +90,7 @@ const addEventsToBoard = function (words) {
                                 .rows[cellX].cells[cellY].classList.add(
                                     "found"
                                 );
+
                             // Cross out the word
                             crossOutWord(words[firstLetterCoords].word);
                             // Update progressbar
