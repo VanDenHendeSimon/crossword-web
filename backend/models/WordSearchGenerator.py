@@ -67,7 +67,6 @@ class WordSearchGenerator:
 
             while not same_coord:
                 attemps += 1
-                print(attemps)
 
                 if attemps > 10:
                     try:
@@ -78,10 +77,9 @@ class WordSearchGenerator:
                             w not in words and
                             len(w) < len(word)
                         )
-                        print("Changed word to %s" % word)
                         attemps = 0
                     except StopIteration:
-                        # no valid word could be found (probably bcus the length dropped to < 3
+                        # no valid word could be found (probably bcus the length dropped to < 3)
                         same_coord = True
 
                 alignment = random.randrange(0, 3)

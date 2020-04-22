@@ -3,6 +3,9 @@
 // Global variables
 const size = 13;
 let htmlBoard;
+let htmlGameOver
+let htmlRow;
+let htmlBar
 let canvas;
 let highlightedCell;
 let wordsFound = [];
@@ -22,8 +25,12 @@ const updateProgressBar = function (amountOfWords) {
     const percentage = `${Math.round(
         (wordsFound.length / amountOfWords) * 100
     )}%`;
-    document.querySelector(".bar").style.width = percentage;
-    document.querySelector(".bar").innerHTML = percentage;
+    htmlBar.style.width = percentage;
+    htmlBar.innerHTML = percentage;
+
+    if (percentage === "100%") {
+        htmlGameOver.classList.remove("disabled");
+    }
 };
 
 const pxToFloat = function (string) {
@@ -36,7 +43,6 @@ const drawLine = function (startCellCoords, endCellCoords) {
     const endX = parseFloat(endCellCoords.split("-")[1]);
     const endY = parseFloat(endCellCoords.split("-")[0]);
 
-    const canvas = document.getElementById("canvas");
     const cellSize = pxToFloat(canvas.style.width) / size;
     const ctx = canvas.getContext("2d");
 
@@ -72,11 +78,14 @@ const addEventsToBoard = function (words) {
                 // Check whether the selected word is in the list of words
                 if (words.hasOwnProperty(firstLetterCoords)) {
                     if (
-                        words[firstLetterCoords].last_letter == lastLetterCoords &&
+                        words[firstLetterCoords].last_letter ==
+                            lastLetterCoords &&
                         !wordsFound.includes(words[firstLetterCoords].word)
                     ) {
                         // A word has been found
                         wordsFound.push(words[firstLetterCoords].word);
+                        // Draw line
+                        drawLine(firstLetterCoords, lastLetterCoords);
 
                         // Colorize the letters of the word that was found
                         for (const cell of words[firstLetterCoords]
@@ -96,9 +105,6 @@ const addEventsToBoard = function (words) {
                             // Update progressbar
                             updateProgressBar(Object.keys(words).length);
                         }
-
-                        // Draw line
-                        drawLine(firstLetterCoords, lastLetterCoords);
                     }
                 }
                 // Turn the highlighted cell off again
@@ -178,7 +184,6 @@ const setDimensions = function () {
         columns = 4;
     }
 
-    const htmlRow = document.querySelector(".o-row");
     htmlRow.style.setProperty("width", `${dimension}px`);
     htmlRow.style.setProperty("height", `${dimension}px`);
     htmlRow.style.setProperty("left", `${(windowWidth - dimension) * 0.5}px`);
@@ -189,6 +194,10 @@ const setDimensions = function () {
     canvas.style.setProperty("width", `${dimension}px`);
     canvas.style.setProperty("height", `${dimension}px`);
     canvas.style.setProperty("left", `${(windowWidth - dimension) * 0.5}px`);
+
+    htmlGameOver.style.setProperty("left", `${0.1 * dimension}px`);
+    htmlGameOver.style.setProperty("top", `${0.2 * dimension}px`);
+    htmlGameOver.style.setProperty("height", `${0.35 * dimension}px`);
 
     setColumnsWordList();
 };
@@ -206,8 +215,20 @@ const setColumnsWordList = function () {
 /* init */
 const init = function () {
     canvas = document.querySelector("#canvas");
+    htmlGameOver = document.querySelector('.js-game-over');
+    htmlRow = document.querySelector(".o-row")
+    htmlBar = document.querySelector(".bar");
+
     setDimensions();
     getWordSearch();
+
+    document.querySelector("#play-again").addEventListener("click", function () {
+        // refresh the page
+        location.reload();
+    });
+    document.querySelector(".close-popup").addEventListener("click", function () {
+        htmlGameOver.classList.add("disabled");
+    });
 };
 
 document.addEventListener("DOMContentLoaded", init);

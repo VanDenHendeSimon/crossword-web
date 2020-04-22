@@ -93,6 +93,36 @@ td {
     color: black;
 }
 
+.js-game-over {
+    position: absolute;
+    top: 120px;
+    left: 20px;
+    text-align: center;
+    background-color: aliceblue;
+    border-radius: 10px;
+    border: solid black 1px;
+    box-shadow: 5px 9px;
+    width: 80%;
+    height: 40vh;
+    z-index: 30;
+}
+
+.game-over-text {
+    position: relative;
+    top: 3em;
+    margin: auto;
+}
+
+.replay-button {
+    margin-top: 1em;
+    border-radius: 5px;
+    width: 50%;
+    height: 3em;
+    color: white;
+    background-color: hotpink;
+    cursor: pointer;
+}
+
 #canvas {
     position: absolute;
     left: 50px;
@@ -100,6 +130,23 @@ td {
     z-index: 20;
     pointer-events: none;
 }
+
+.close-popup {
+    color: crimson;
+    text-align: right;
+    position: relative;
+    top: 0em;
+    right: 0.5em;
+    cursor: pointer;
+    font-weight: bold;
+    font-size: 1.5em;
+}
+
+.disabled {
+    pointer-events: none;
+    opacity: 0;
+}
+
 
 /* Small devices (landscape phones, 576px and up) */
 @media (min-width: 576px) {
