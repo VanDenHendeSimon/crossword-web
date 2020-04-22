@@ -2,14 +2,19 @@
 
 // Global variables
 const size = 13;
+
+// html elements
 let htmlBoard;
-let htmlGameOver
+let htmlGameOver;
 let htmlRow;
-let htmlBar
+let htmlBar;
 let canvas;
+
+// Other variables that need to be global with the current setup
 let highlightedCell;
 let wordsFound = [];
 let columns = 4;
+const alphabet = 'abcdefghijklmnopqrstuvwxyz'
 
 const crossOutWord = function (word) {
     for (const w of document.querySelectorAll(".wordListItem")) {
@@ -118,13 +123,17 @@ const addEventsToBoard = function (words) {
     }
 };
 
+const randomLetter = function () {
+    return alphabet[parseInt(Math.random() * 26)];
+};
+
 const createTable = function (puzzle) {
     // Generate html to form table
     let htmlString = '<table id="playingBoard">';
     for (let x = 0; x < size; x++) {
         htmlString += `<tr>`;
         for (let y = 0; y < size; y++) {
-            let letter = "-";
+            let letter = randomLetter();
             const key = `${x}-${y}`;
             if (key in puzzle) {
                 letter = puzzle[key];
@@ -215,20 +224,24 @@ const setColumnsWordList = function () {
 /* init */
 const init = function () {
     canvas = document.querySelector("#canvas");
-    htmlGameOver = document.querySelector('.js-game-over');
-    htmlRow = document.querySelector(".o-row")
+    htmlGameOver = document.querySelector(".js-game-over");
+    htmlRow = document.querySelector(".o-row");
     htmlBar = document.querySelector(".bar");
 
     setDimensions();
     getWordSearch();
 
-    document.querySelector("#play-again").addEventListener("click", function () {
-        // refresh the page
-        location.reload();
-    });
-    document.querySelector(".close-popup").addEventListener("click", function () {
-        htmlGameOver.classList.add("disabled");
-    });
+    document
+        .querySelector("#play-again")
+        .addEventListener("click", function () {
+            // refresh the page
+            location.reload();
+        });
+    document
+        .querySelector(".close-popup")
+        .addEventListener("click", function () {
+            htmlGameOver.classList.add("disabled");
+        });
 };
 
 document.addEventListener("DOMContentLoaded", init);
