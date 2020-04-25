@@ -135,12 +135,10 @@ class WordSearchGenerator:
         first_index_row = random.randrange(0, self.size)
         first_index_col = random.randrange(0, (self.size - len(word)))
 
-        # coord_dict[(first_index_row, first_index_col)] = word[0]
         coord_dict["%d-%d" % (first_index_row, first_index_col)] = word[0]
         # There is only one row, multiple columns
         for index, char in enumerate(word):
             if index > 0:
-                # coord_dict[(first_index_row, first_index_col + index)] = char
                 coord_dict["%d-%d" % (first_index_row, first_index_col + index)] = char
 
         return coord_dict
@@ -154,7 +152,6 @@ class WordSearchGenerator:
         coord_dict["%d-%d" % (first_index_row, first_index_col)] = word[0]
         for index, char in enumerate(word):
             if index > 0:
-                # coord_dict[(first_index_row + index, first_index_col)] = char
                 coord_dict["%d-%d" % (first_index_row + index, first_index_col)] = char
 
         return coord_dict
@@ -169,7 +166,6 @@ class WordSearchGenerator:
         coord_dict["%d-%d" % (first_index_row, first_index_col)] = word[0]
         for index, char in enumerate(word):
             if index > 0:
-                # coord_dict[(first_index_row + index, first_index_col + index)] = char
                 coord_dict["%d-%d" % (first_index_row + index, first_index_col + index)] = char
 
         return coord_dict
