@@ -1,8 +1,6 @@
-import json
 from flask import Flask, jsonify    # request
 from flask_cors import CORS
-from repositories.DataRepository import DataRepository
-from models.WordSearchGenerator import WordSearchGenerator
+from repositories.WordSearchGenerator import WordSearchGenerator
 
 
 # Start app
