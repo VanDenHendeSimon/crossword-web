@@ -3,6 +3,7 @@ design/
 .vscode/
 .idea/
 database/
+data/
 backend/repositories/__pycache__/
 backend/models/__pycache__/
 backend/geckodriver.log
