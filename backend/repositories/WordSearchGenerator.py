@@ -24,7 +24,7 @@ class WordSearchGenerator:
     def generate_puzzle(self):
         all_words = [
             word['word'] for word in DataRepository.get_all_words()
-            if self.size > len(word['word']) > 2 and word['word'].isalnum()
+            if self.size > len(word['word'])
         ]
         random.shuffle(all_words)
         # base words
