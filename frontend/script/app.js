@@ -2,14 +2,17 @@
 
 // Global variables
 const size = 13;
+let totalSecondsPlayed = 0;
+let playing = true;
 
 // html elements
 let htmlBoard;
 let htmlGameOver;
 let htmlRow;
 let htmlBar;
+let htmlTimer;
+let htmlHints;
 let canvas;
-let hints;
 
 // Other variables that need to be global with the current setup
 let highlightedCell;
@@ -38,12 +41,18 @@ const updateHintsHTML = function() {
     }
 
     htmlString += '</div>'
-    hints.innerHTML = htmlString;
+    htmlHints.innerHTML = htmlString;
 }
 
 const highlightCell = function(cell) {
     highlightedCell = cell;
     cell.classList.add("highlight");
+}
+
+const formatSeconds = function(allSeconds) {
+    const minutes = Math.floor(allSeconds / 60);
+    const seconds = allSeconds - (minutes * 60);
+    return `${minutes.toString().padStart(2, 0)}:${seconds.toString().padStart(2, 0)}`;
 }
 
 const takeHint = function() {
@@ -66,8 +75,8 @@ const takeHint = function() {
 
         // Disable after clicking last time
         if (hintCount == 0) {
-            hints.classList.remove('js-hint');
-            hints.classList.add('js-hint-disabled');   
+            htmlHints.classList.remove('js-hint');
+            htmlHints.classList.add('js-hint-disabled');   
         }
     }
 }
@@ -91,6 +100,7 @@ const updateProgressBar = function (amountOfWords) {
 
     if (percentage === "100%") {
         htmlGameOver.classList.remove("disabled");
+        playing = false;
     }
 };
 
@@ -290,7 +300,8 @@ const init = function () {
     htmlGameOver = document.querySelector(".js-game-over");
     htmlRow = document.querySelector(".o-row");
     htmlBar = document.querySelector(".bar");
-    hints = document.querySelector('.js-hint');
+    htmlHints = document.querySelector('.js-hint');
+    htmlTimer = document.querySelector('.js-timer');
 
     setDimensions();
     getWordSearch();
@@ -307,9 +318,16 @@ const init = function () {
             htmlGameOver.classList.add("disabled");
         });
 
-    hints.addEventListener('click', function() {
+    htmlHints.addEventListener('click', function() {
         takeHint();
     });
+
+    setInterval(function(){
+        if (playing) {
+            totalSecondsPlayed += 1;
+            htmlTimer.innerHTML = formatSeconds(totalSecondsPlayed);
+        }
+    }, 1000);
 };
 
 document.addEventListener("DOMContentLoaded", init);
