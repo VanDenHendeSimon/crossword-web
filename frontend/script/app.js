@@ -134,64 +134,77 @@ const drawLine = function (startCellCoords, endCellCoords) {
     ctx.stroke();
 };
 
+const play = function() {
+    // Pause icon
+    htmlTimerIcon.innerHTML = '<svg class="c-timer-icon" xmlns="http://www.w3.org/2000/svg" height="24" viewBox="0 0 24 24" width="24"><path d="M0 0h24v24H0V0z" fill="none"/><path d="M9 16h2V8H9v8zm3-14C6.48 2 2 6.48 2 12s4.48 10 10 10 10-4.48 10-10S17.52 2 12 2zm0 18c-4.41 0-8-3.59-8-8s3.59-8 8-8 8 3.59 8 8-3.59 8-8 8zm1-4h2V8h-2v8z"/></svg>';
+    playing = true;
+}
+
+const pause = function() {
+    // Play icon
+    htmlTimerIcon.innerHTML = '<svg class="c-timer-icon" xmlns="http://www.w3.org/2000/svg" height="24" viewBox="0 0 24 24" width="24"><path d="M0 0h24v24H0V0z" fill="none"/><path d="M10 16.5l6-4.5-6-4.5zM12 2C6.48 2 2 6.48 2 12s4.48 10 10 10 10-4.48 10-10S17.52 2 12 2zm0 18c-4.41 0-8-3.59-8-8s3.59-8 8-8 8 3.59 8 8-3.59 8-8 8z"/></svg>';
+    playing = false;
+}
+
 const addEventsToBoard = function (words) {
     for (const cell of document.querySelectorAll("td")) {
         cell.addEventListener("click", function () {
-            if (playing) {
-                if (highlightedCell != null) {
-                    // Clicked for 2nd time -> lookup word
-                    highlightedCell.classList.remove("highlight");
-    
-                    // Store first letter coordinates in the right format
-                    const firstLetterX = highlightedCell.getAttribute("data-x");
-                    const firstLetterY = highlightedCell.getAttribute("data-y");
-                    const firstLetterCoords = `${firstLetterX}-${firstLetterY}`;
-    
-                    // Store last letter coordinates in the right format
-                    const lastLetterX = this.getAttribute("data-x");
-                    const lastLetterY = this.getAttribute("data-y");
-                    const lastLetterCoords = `${lastLetterX}-${lastLetterY}`;
-    
-                    // Check whether the selected word is in the list of words
-                    if (words.hasOwnProperty(firstLetterCoords)) {
-                        if (
-                            words[firstLetterCoords].last_letter ==
-                                lastLetterCoords &&
-                            !wordsFound.includes(words[firstLetterCoords].word)
-                        ) {
-                            // A word has been found
-                            wordsFound.push(words[firstLetterCoords].word);
-                            // Draw line
-                            drawLine(firstLetterCoords, lastLetterCoords);
-    
-                            // Colorize the letters of the word that was found
-                            for (const cell of words[firstLetterCoords]
-                                .all_letters) {
-                                // Get coordinates of each cell of the word
-                                const cellX = cell.split("-")[0];
-                                const cellY = cell.split("-")[1];
-                                // Apply the style
-                                document
-                                    .getElementById("playingBoard")
-                                    .rows[cellX].cells[cellY].classList.add(
-                                        "found"
-                                    );
-    
-                                // Cross out the word
-                                crossOutWord(words[firstLetterCoords].word);
-                                // Update progressbar
-                                updateProgressBar(Object.keys(words).length);
-                            }
+            // if the game was paused, resume
+            if (!playing) {
+                play();
+            }
+
+            if (highlightedCell != null) {
+                // Clicked for 2nd time -> lookup word
+                highlightedCell.classList.remove("highlight");
+
+                // Store first letter coordinates in the right format
+                const firstLetterX = highlightedCell.getAttribute("data-x");
+                const firstLetterY = highlightedCell.getAttribute("data-y");
+                const firstLetterCoords = `${firstLetterX}-${firstLetterY}`;
+
+                // Store last letter coordinates in the right format
+                const lastLetterX = this.getAttribute("data-x");
+                const lastLetterY = this.getAttribute("data-y");
+                const lastLetterCoords = `${lastLetterX}-${lastLetterY}`;
+
+                // Check whether the selected word is in the list of words
+                if (words.hasOwnProperty(firstLetterCoords)) {
+                    if (
+                        words[firstLetterCoords].last_letter ==
+                            lastLetterCoords &&
+                        !wordsFound.includes(words[firstLetterCoords].word)
+                    ) {
+                        // A word has been found
+                        wordsFound.push(words[firstLetterCoords].word);
+                        // Draw line
+                        drawLine(firstLetterCoords, lastLetterCoords);
+
+                        // Colorize the letters of the word that was found
+                        for (const cell of words[firstLetterCoords]
+                            .all_letters) {
+                            // Get coordinates of each cell of the word
+                            const cellX = cell.split("-")[0];
+                            const cellY = cell.split("-")[1];
+                            // Apply the style
+                            document
+                                .getElementById("playingBoard")
+                                .rows[cellX].cells[cellY].classList.add(
+                                    "found"
+                                );
+
+                            // Cross out the word
+                            crossOutWord(words[firstLetterCoords].word);
+                            // Update progressbar
+                            updateProgressBar(Object.keys(words).length);
                         }
                     }
-                    // Turn the highlighted cell off again
-                    highlightedCell = null;
-                } else {
-                    // Clicked first time -> highlight current cell
-                    highlightCell(this);
                 }
-            }   else {
-                window.alert('Game is paused');
+                // Turn the highlighted cell off again
+                highlightedCell = null;
+            } else {
+                // Clicked first time -> highlight current cell
+                highlightCell(this);
             }
         });
     }
@@ -298,6 +311,14 @@ const setColumnsWordList = function () {
     }
 };
 
+const playPause = function() {
+    if (playing) {
+        pause();
+    }   else {
+        play();
+    }
+}
+
 /* init */
 const init = function () {
     canvas = document.querySelector("#canvas");
@@ -324,28 +345,12 @@ const init = function () {
         });
 
     htmlTimerIcon.addEventListener('click', function() {
-        if (playing) {
-            // Play
-            htmlTimerIcon.innerHTML = '<svg class="c-timer-icon" xmlns="http://www.w3.org/2000/svg" height="24" viewBox="0 0 24 24" width="24"><path d="M0 0h24v24H0V0z" fill="none"/><path d="M10 16.5l6-4.5-6-4.5zM12 2C6.48 2 2 6.48 2 12s4.48 10 10 10 10-4.48 10-10S17.52 2 12 2zm0 18c-4.41 0-8-3.59-8-8s3.59-8 8-8 8 3.59 8 8-3.59 8-8 8z"/></svg>';
-            playing = false;
-        }   else {
-            // Pause
-            htmlTimerIcon.innerHTML = '<svg class="c-timer-icon" xmlns="http://www.w3.org/2000/svg" height="24" viewBox="0 0 24 24" width="24"><path d="M0 0h24v24H0V0z" fill="none"/><path d="M9 16h2V8H9v8zm3-14C6.48 2 2 6.48 2 12s4.48 10 10 10 10-4.48 10-10S17.52 2 12 2zm0 18c-4.41 0-8-3.59-8-8s3.59-8 8-8 8 3.59 8 8-3.59 8-8 8zm1-4h2V8h-2v8z"/></svg>';
-            playing = true;
-        }
+        playPause();
     });
 
     // Also allow this to happen when clicking on the timer text
     document.querySelector('.js-timer').addEventListener('click', function() {
-        if (playing) {
-            // Play
-            htmlTimerIcon.innerHTML = '<svg class="c-timer-icon" xmlns="http://www.w3.org/2000/svg" height="24" viewBox="0 0 24 24" width="24"><path d="M0 0h24v24H0V0z" fill="none"/><path d="M10 16.5l6-4.5-6-4.5zM12 2C6.48 2 2 6.48 2 12s4.48 10 10 10 10-4.48 10-10S17.52 2 12 2zm0 18c-4.41 0-8-3.59-8-8s3.59-8 8-8 8 3.59 8 8-3.59 8-8 8z"/></svg>';
-            playing = false;
-        }   else {
-            // Pause
-            htmlTimerIcon.innerHTML = '<svg class="c-timer-icon" xmlns="http://www.w3.org/2000/svg" height="24" viewBox="0 0 24 24" width="24"><path d="M0 0h24v24H0V0z" fill="none"/><path d="M9 16h2V8H9v8zm3-14C6.48 2 2 6.48 2 12s4.48 10 10 10 10-4.48 10-10S17.52 2 12 2zm0 18c-4.41 0-8-3.59-8-8s3.59-8 8-8 8 3.59 8 8-3.59 8-8 8zm1-4h2V8h-2v8z"/></svg>';
-            playing = true;
-        }
+        playPause();
     });
 
     htmlHints.addEventListener('click', function() {
