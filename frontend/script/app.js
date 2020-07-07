@@ -42,9 +42,7 @@ const updateHintsHTML = function() {
 }
 
 const highlightCell = function(cell) {
-    console.log('highlighting some cell');
     highlightedCell = cell;
-    // Clicked first time -> highlight current cell
     cell.classList.add("highlight");
 }
 
@@ -54,6 +52,7 @@ const takeHint = function() {
 
         // Highlight some letter
         for (const word of Object.keys(wordsObject)) {
+            // Only if the word has not yet been found
             if (!wordsFound.includes(wordsObject[word]['word'])) {
                 highlightCell(
                     document.querySelector(`[data-x='${word.split('-')[0]}'][data-y='${word.split('-')[1]}']`)
@@ -178,6 +177,7 @@ const addEventsToBoard = function (words) {
                 // Turn the highlighted cell off again
                 highlightedCell = null;
             } else {
+                // Clicked first time -> highlight current cell
                 highlightCell(this);
             }
         });
