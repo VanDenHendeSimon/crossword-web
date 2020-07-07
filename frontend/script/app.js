@@ -113,8 +113,6 @@ const getREMPixels = function(rem) {
 }
 
 const drawLine = function (startCellCoords, endCellCoords) {
-    // margin bottom + 1.7rem (height of the largest icon above the grid)
-    const topOffset = 4 + getREMPixels(1.7);
     const startX = parseFloat(startCellCoords.split("-")[1]);
     const startY = parseFloat(startCellCoords.split("-")[0]);
     const endX = parseFloat(endCellCoords.split("-")[1]);
@@ -126,11 +124,11 @@ const drawLine = function (startCellCoords, endCellCoords) {
     ctx.beginPath();
     ctx.moveTo(
         (cellSize * startX + cellSize * 0.5),
-        (cellSize * startY + cellSize * 0.5) + topOffset
+        (cellSize * startY + cellSize * 0.5)
     );
     ctx.lineTo(
         (cellSize * endX + cellSize * 0.5),
-        (cellSize * endY + cellSize * 0.5) + topOffset
+        (cellSize * endY + cellSize * 0.5)
     );
     ctx.stroke();
 };
@@ -276,6 +274,7 @@ const setDimensions = function () {
     canvas.style.setProperty("width", `${dimension}px`);
     canvas.style.setProperty("height", `${dimension}px`);
     canvas.style.setProperty("left", `${(windowWidth - dimension) * 0.5}px`);
+    canvas.style.setProperty("top", `${20 + 6 + (parseFloat(getComputedStyle(document.documentElement).fontSize) * 1.7)}px`);
 
     htmlGameOver.style.setProperty("left", `${0.1 * dimension}px`);
     htmlGameOver.style.setProperty("top", `${0.2 * dimension}px`);

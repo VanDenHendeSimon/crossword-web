@@ -188,8 +188,6 @@ td {
 
 #canvas {
     position: absolute;
-    left: 50px;
-    top: 20px;
     z-index: 20;
     pointer-events: none;
 }
