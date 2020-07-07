@@ -45,6 +45,12 @@ ul {
 .c-timer-icon {
     width: 1.7rem;
     height: 1.7rem;
+    cursor: pointer;
+    fill: currentColor;
+}
+
+.c-timer-icon:hover {
+    fill: black;
 }
 
 .js-hint-text {
@@ -58,6 +64,8 @@ ul {
 
 .js-timer {
     margin-left: 4px;
+    line-height: 1rem;
+    cursor: pointer;
 }
 
 .js-hint {
