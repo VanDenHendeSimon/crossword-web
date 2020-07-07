@@ -274,7 +274,7 @@ const setDimensions = function () {
 
     if (dimension === windowWidth) {
         // width < height (= portrait mode)
-        dimension = windowWidth * 0.75;
+        dimension = windowWidth * 0.8;
         columns = 3;
     } else {
         // height < width (= landscape)
@@ -312,11 +312,7 @@ const setColumnsWordList = function () {
 };
 
 const playPause = function() {
-    if (playing) {
-        pause();
-    }   else {
-        play();
-    }
+    playing ? pause() : play();
 }
 
 /* init */
