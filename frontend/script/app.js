@@ -18,6 +18,7 @@ let columns = 4;
 const alphabet = 'abcdefghijklmnopqrstuvwxyz'
 
 let hintCount = 3;
+let wordsObject = null;
 
 const star = '<svg class="c-hint-icon" xmlns="http://www.w3.org/2000/svg" enable-background="new 0 0 24 24" height="24" viewBox="0 0 24 24" width="24"><g><path d="M0,0h24v24H0V0z" fill="none"/><path d="M0,0h24v24H0V0z" fill="none"/></g><g><path d="M12,17.27L18.18,21l-1.64-7.03L22,9.24l-7.19-0.61L12,2L9.19,8.63L2,9.24l5.46,4.73L5.82,21L12,17.27z"/></g></svg>'
 const starOutline = '<svg class="c-hint-icon" xmlns="http://www.w3.org/2000/svg" height="24" viewBox="0 0 24 24" width="24"><path d="M0 0h24v24H0V0z" fill="none"/><path d="M22 9.24l-7.19-.62L12 2 9.19 8.63 2 9.24l5.46 4.73L5.82 21 12 17.27 18.18 21l-1.63-7.03L22 9.24zM12 15.4l-3.76 2.27 1-4.28-3.32-2.88 4.38-.38L12 6.1l1.71 4.04 4.38.38-3.32 2.88 1 4.28L12 15.4z"/></svg>'
@@ -40,13 +41,32 @@ const updateHintsHTML = function() {
     hints.innerHTML = htmlString;
 }
 
+const highlightCell = function(cell) {
+    console.log('highlighting some cell');
+    highlightedCell = cell;
+    // Clicked first time -> highlight current cell
+    cell.classList.add("highlight");
+}
+
 const takeHint = function() {
     if (hintCount > 0) {
         hintCount -= 1;
+
+        // Highlight some letter
+        for (const word of Object.keys(wordsObject)) {
+            if (!wordsFound.includes(wordsObject[word]['word'])) {
+                highlightCell(
+                    document.querySelector(`[data-x='${word.split('-')[0]}'][data-y='${word.split('-')[1]}']`)
+                );
+                break;
+            }
+        }
+
+        // Update the stars in the hint box
         updateHintsHTML();
 
+        // Disable after clicking last time
         if (hintCount == 0) {
-            // Disable after clicking last time
             hints.classList.remove('js-hint');
             hints.classList.add('js-hint-disabled');   
         }
@@ -86,7 +106,6 @@ const getREMPixels = function(rem) {
 const drawLine = function (startCellCoords, endCellCoords) {
     // margin bottom + 1.7rem (height of the largest icon above the grid)
     const topOffset = 4 + getREMPixels(1.7);
-    console.log(topOffset);
     const startX = parseFloat(startCellCoords.split("-")[1]);
     const startY = parseFloat(startCellCoords.split("-")[0]);
     const endX = parseFloat(endCellCoords.split("-")[1]);
@@ -159,9 +178,7 @@ const addEventsToBoard = function (words) {
                 // Turn the highlighted cell off again
                 highlightedCell = null;
             } else {
-                highlightedCell = this;
-                // Clicked first time -> highlight current cell
-                this.classList.add("highlight");
+                highlightCell(this);
             }
         });
     }
@@ -205,9 +222,10 @@ const createWordList = function (words) {
 };
 
 const showWordSearch = function (jsonObject) {
+    wordsObject = jsonObject.words;
     createTable(jsonObject.puzzle);
-    createWordList(jsonObject.words);
-    addEventsToBoard(jsonObject.words);
+    createWordList(wordsObject);
+    addEventsToBoard(wordsObject);
 };
 
 const getWordSearch = function () {
