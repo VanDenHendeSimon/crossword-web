@@ -23,6 +23,68 @@ ul {
     left: 100px;
 }
 
+.c-top {
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    margin-bottom: 4px;
+}
+
+.o-layout {
+    display: flex;
+}
+
+.o-layout--justify-space-between {
+    justify-content: space-between;
+}
+
+.o-layout--align-center {
+    align-items: center;
+}
+
+.c-timer-icon {
+    width: 1.7rem;
+    height: 1.7rem;
+}
+
+.js-hint-text {
+    margin-right: 4px;
+}
+
+.c-hint-icon {
+    width: 1rem;
+    height: 1rem;
+}
+
+.js-timer {
+    margin-left: 4px;
+}
+
+.js-hint {
+    border-radius: 5px;
+    padding: 4px 12px;
+    color: currentColor;
+    background-color: lightgray;
+    -moz-user-select: none;
+    cursor: pointer;
+}
+
+.js-hint:hover {
+    background-color: hotpink;
+    color: white;
+    fill: white;
+}
+
+.js-hint-disabled {
+    border-radius: 5px;
+    padding: 4px 12px;
+    color: #777;
+    fill: #777;
+    background-color: lightgray;
+    cursor: pointer;
+    -moz-user-select: none;
+}
+
 /* allow table to take full width and height of the container */
 .js-board {
     width: 100%;
@@ -87,10 +149,10 @@ td {
 .bar {
     width: 1%;
     border-radius: 5px;
-    height: 30px;
+    height: 2rem;
     background-color: hotpink;
     text-align: center; /* To center it horizontally (if you want) */
-    line-height: 30px; /* To center it vertically */
+    line-height: 2rem; /* To center it vertically */
     color: white;
 }
 

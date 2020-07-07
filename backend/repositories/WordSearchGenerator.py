@@ -22,8 +22,12 @@ class WordSearchGenerator:
             raise ValueError("Size %s is not valid, must be of type int" % value)
 
     def generate_puzzle(self):
+        # all_words = [
+            # word['word'] for word in DataRepository.get_all_words()
+            # if self.size > len(word['word'])
+        # ]
         all_words = [
-            word['word'] for word in DataRepository.get_all_words()
+            word['word'] for word in [{'word': 'test'}, {'word': 'testje'}]
             if self.size > len(word['word'])
         ]
         random.shuffle(all_words)

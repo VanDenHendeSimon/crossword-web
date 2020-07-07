@@ -9,12 +9,49 @@ let htmlGameOver;
 let htmlRow;
 let htmlBar;
 let canvas;
+let hints;
 
 // Other variables that need to be global with the current setup
 let highlightedCell;
 let wordsFound = [];
 let columns = 4;
 const alphabet = 'abcdefghijklmnopqrstuvwxyz'
+
+let hintCount = 3;
+
+const star = '<svg class="c-hint-icon" xmlns="http://www.w3.org/2000/svg" enable-background="new 0 0 24 24" height="24" viewBox="0 0 24 24" width="24"><g><path d="M0,0h24v24H0V0z" fill="none"/><path d="M0,0h24v24H0V0z" fill="none"/></g><g><path d="M12,17.27L18.18,21l-1.64-7.03L22,9.24l-7.19-0.61L12,2L9.19,8.63L2,9.24l5.46,4.73L5.82,21L12,17.27z"/></g></svg>'
+const starOutline = '<svg class="c-hint-icon" xmlns="http://www.w3.org/2000/svg" height="24" viewBox="0 0 24 24" width="24"><path d="M0 0h24v24H0V0z" fill="none"/><path d="M22 9.24l-7.19-.62L12 2 9.19 8.63 2 9.24l5.46 4.73L5.82 21 12 17.27 18.18 21l-1.63-7.03L22 9.24zM12 15.4l-3.76 2.27 1-4.28-3.32-2.88 4.38-.38L12 6.1l1.71 4.04 4.38.38-3.32 2.88 1 4.28L12 15.4z"/></svg>'
+
+const updateHintsHTML = function() {
+    let htmlString = `
+    <div class="o-layout o-layout--justify-space-between o-layout--align-center">
+        <p class="js-hint-text">Hint</p>
+    `;
+
+    for (let i=0; i<hintCount; i++) {
+        htmlString += star;
+    }
+
+    for (let j=0; j<(3-hintCount); j++) {
+        htmlString += starOutline;
+    }
+
+    htmlString += '</div>'
+    hints.innerHTML = htmlString;
+}
+
+const takeHint = function() {
+    if (hintCount > 0) {
+        hintCount -= 1;
+        updateHintsHTML();
+
+        if (hintCount == 0) {
+            // Disable after clicking last time
+            hints.classList.remove('js-hint');
+            hints.classList.add('js-hint-disabled');   
+        }
+    }
+}
 
 const crossOutWord = function (word) {
     for (const w of document.querySelectorAll(".wordListItem")) {
@@ -42,7 +79,14 @@ const pxToFloat = function (string) {
     return parseFloat(string.slice(0, -2));
 };
 
+const getREMPixels = function(rem) {
+    return rem * parseFloat(getComputedStyle(document.documentElement).fontSize);
+}
+
 const drawLine = function (startCellCoords, endCellCoords) {
+    // margin bottom + 1.7rem (height of the largest icon above the grid)
+    const topOffset = 4 + getREMPixels(1.7);
+    console.log(topOffset);
     const startX = parseFloat(startCellCoords.split("-")[1]);
     const startY = parseFloat(startCellCoords.split("-")[0]);
     const endX = parseFloat(endCellCoords.split("-")[1]);
@@ -53,12 +97,12 @@ const drawLine = function (startCellCoords, endCellCoords) {
 
     ctx.beginPath();
     ctx.moveTo(
-        cellSize * startX + cellSize * 0.5,
-        cellSize * startY + cellSize * 0.5
+        (cellSize * startX + cellSize * 0.5),
+        (cellSize * startY + cellSize * 0.5) + topOffset
     );
     ctx.lineTo(
-        cellSize * endX + cellSize * 0.5,
-        cellSize * endY + cellSize * 0.5
+        (cellSize * endX + cellSize * 0.5),
+        (cellSize * endY + cellSize * 0.5) + topOffset
     );
     ctx.stroke();
 };
@@ -124,7 +168,8 @@ const addEventsToBoard = function (words) {
 };
 
 const randomLetter = function () {
-    return alphabet[parseInt(Math.random() * 26)];
+    return 'x';
+    // return alphabet[parseInt(Math.random() * 26)];
 };
 
 const createTable = function (puzzle) {
@@ -227,6 +272,7 @@ const init = function () {
     htmlGameOver = document.querySelector(".js-game-over");
     htmlRow = document.querySelector(".o-row");
     htmlBar = document.querySelector(".bar");
+    hints = document.querySelector('.js-hint');
 
     setDimensions();
     getWordSearch();
@@ -242,6 +288,10 @@ const init = function () {
         .addEventListener("click", function () {
             htmlGameOver.classList.add("disabled");
         });
+
+    hints.addEventListener('click', function() {
+        takeHint();
+    });
 };
 
 document.addEventListener("DOMContentLoaded", init);
